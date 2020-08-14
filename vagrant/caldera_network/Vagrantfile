@@ -1,0 +1,54 @@
+Vagrant.configure("2") do |config|
+    
+    # Caldera server setup.
+    config.vm.define "caldera" do |subconfig|
+        subconfig.vm.box = "bento/ubuntu-20.04"
+        subconfig.vm.network :private_network, ip: "192.168.33.10"
+        subconfig.vm.provider :vmware_desktop do |web|
+            web.gui = true
+            web.vmx["memsize"] = "2048"
+            web.vmx["numvcpus"] = "1"
+            web.vmx["displayname"] = "caldera-server"
+        end
+        subconfig.vm.provision "shell", path: "../../scripts/ubuntu/caldera.sh", name: "caldera.sh", privileged: false
+    end
+
+    # Linux client to access the Caldera web server
+    config.vm.define "linux_client" do |subconfig|
+        subconfig.vm.box = "vagrant-ubuntu-custom"
+        subconfig.vm.network :private_network, ip: "192.168.33.11"
+        subconfig.vm.provider :vmware_desktop do |client|
+            client.gui = true
+            client.vmx["memsize"] = "4096"
+            client.vmx["numvcpus"] = "1"
+            client.vmx["displayname"] = "client-ubuntu"
+        end
+        subconfig.vm.provision "shell", path: "../../scripts/ubuntu/chrome.sh", name: "chrome.sh", privileged: false
+    end
+
+    # Linux victim #1
+    config.vm.define "linux_victim_1" do |subconfig|
+        subconfig.vm.box = "bento/debian-9"
+        subconfig.vm.network :private_network, ip: "192.168.33.20"
+        subconfig.vm.provider :vmware_desktop do |client|
+            client.gui = true
+            client.vmx["memsize"] = "2048"
+            client.vmx["numvcpus"] = "1"
+            client.vmx["displayname"] = "linux-victim-1"
+        end
+        subconfig.vm.provision "shell", path: "../../scripts/debian/curl.sh", name: "curl.sh"
+    end
+
+    # Linux victim #1
+    config.vm.define "linux_victim_2" do |subconfig|
+        subconfig.vm.box = "bento/debian-9"
+        subconfig.vm.network :private_network, ip: "192.168.33.21"
+        subconfig.vm.provider :vmware_desktop do |client|
+            client.gui = true
+            client.vmx["memsize"] = "2048"
+            client.vmx["numvcpus"] = "1"
+            client.vmx["displayname"] = "linux-victim-2"
+        end
+        subconfig.vm.provision "shell", path: "../../scripts/debian/curl.sh", name: "curl.sh"
+    end
+end

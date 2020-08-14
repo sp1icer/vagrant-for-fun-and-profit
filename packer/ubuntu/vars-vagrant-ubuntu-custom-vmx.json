@@ -1,0 +1,5 @@
+{
+    "vm_name": "vagrant-ubuntu-custom",
+    "box_name" : "vagrant-ubuntu-custom", 
+    "box_desc" : "Vagrant for fun and profit Ubuntu template image."
+}

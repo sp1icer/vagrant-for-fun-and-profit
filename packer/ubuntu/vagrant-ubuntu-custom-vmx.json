@@ -1,0 +1,45 @@
+{
+    "builders": [
+      {
+        "type": "vmware-vmx",
+        "source_path": "INSERT THE PATH TO YOUR VMX FILE HERE",
+        "ssh_username": "vagrant",
+        "ssh_password": "vagrant",
+        "ssh_timeout": "10000s",
+        "shutdown_command": "echo vagrant | sudo shutdown -hP now"
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "shell",
+        "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S bash '{{ .Path }}'",
+        "expect_disconnect": true,
+        "script": "../../scripts/ubuntu/update.sh",
+        "valid_exit_codes": [0,1]
+      },
+      {
+        "type": "shell",
+        "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S bash '{{ .Path }}'",
+        "expect_disconnect": true,
+        "script": "../../scripts/ubuntu/open-vm-tools.sh"
+      }, 
+      {
+        "type": "shell",
+        "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S bash '{{ .Path }}'",
+        "expect_disconnect": true,
+        "scripts": 
+        [
+          "../../scripts/ubuntu/vagrant.sh",
+          "../../scripts/ubuntu/sudoers.sh",
+          "../../scripts/ubuntu/python.sh"
+        ]
+      }
+    ],
+    "post-processors": [
+      {
+        "type": "vagrant",
+        "vagrantfile_template": "Vagrantfile.tpl",
+        "output": "../boxes/{{ user `vm_name` }}.box"
+      }
+    ]
+  }

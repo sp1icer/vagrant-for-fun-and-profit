@@ -1,0 +1,6 @@
+boxes/
+boxes/*
+packer_cache/
+packer_cache/*
+.vagrant/
+.vagrant/*

@@ -1,0 +1,12 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "vagrant-ubuntu-custom"
+    config.vm.provider "vmware_desktop" do |vb|
+      # Display the VMWare GUI when booting the machine
+      vb.gui = true
+    
+      # Customize the amount of memory on the VM:
+      vb.memory = "4096"
+    end
+    config.vm.provision "shell", path: "../../scripts/ubuntu/comby.sh", name: "comby.sh", privileged: false
+  end
+  
